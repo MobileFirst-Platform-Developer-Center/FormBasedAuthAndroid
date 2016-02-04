@@ -24,7 +24,7 @@ import com.worklight.wlclient.api.challengehandler.ChallengeHandler;
 
 public class AndroidChallengeHandler extends ChallengeHandler{
 	private Activity parentActivity;
-	private WLResponse cachedResponse; 
+	private WLResponse cachedResponse;
 
 
 	public AndroidChallengeHandler(Activity activity, String realm) {
@@ -44,26 +44,21 @@ public class AndroidChallengeHandler extends ChallengeHandler{
 
 	@Override
 	public boolean isCustomResponse(WLResponse response) {
-		if (response == null || response.getResponseText() == null || 
+		if (response == null || response.getResponseText() == null ||
 				response.getResponseText().indexOf("j_security_check") == -1) { 
-			return false; 
-		} 
-		return true; 
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public void handleChallenge(WLResponse response){
-		if (!isCustomResponse(response)) {
-			submitSuccess(response);
-		} else {
-			cachedResponse = response;
-			Intent login = new Intent(parentActivity, LoginFormBasedAuth.class);
-			parentActivity.startActivityForResult(login, 1);
-		}
-		
+		cachedResponse = response;
+		Intent login = new Intent(parentActivity, LoginFormBasedAuth.class);
+		parentActivity.startActivityForResult(login, 1);
 	}
-	
-	
+
+
 	public void submitLogin(int resultCode, String userName, String password, boolean back){
 		if (resultCode != Activity.RESULT_OK || back) {
 			submitFailure(cachedResponse);
@@ -74,7 +69,7 @@ public class AndroidChallengeHandler extends ChallengeHandler{
 			submitLoginForm("/j_security_check", params, null, 0, "post");
 		}
 	}
-	
+
 
 
 
